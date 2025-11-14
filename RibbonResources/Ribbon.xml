@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<customUI xmlns='http://schemas.microsoft.com/office/2009/07/customui' loadImage='LoadImage'>
+	<ribbon>
+		<tabs>
+			<tab  idMso="TabHome">
+				<group id='group1' label='AutoCad'>
+					<button id='addcircle' label='cad圆' onAction='OnButtonPressed' image='Image1'   
+							screentip="绘制圆" 
+							 supertip="只是试试 &#13; 第二行。"  />
+					<button id='getpoint' label='get点' onAction='OnButtonPressed' image='Image1' />
+					<button id='road1' label='路线' onAction='OnButtonPressed' image='Image1' />
+					
+					<button id='btnCallJS1' label='调用网页方法' onAction='OnButtonPressed' size='large'  />
+				</group>
+			</tab>
+
+		
+				<!--
+				<group id='jsGroup' label='JavaScript 操作'>
+					<button id='btnCallJS' label='调用 JS 函数' size='large' onAction='OnCallJSClick' imageMso='HappyFace' />
+					<button id='btnShowAlert' label='触发网页 Alert' size='large' onAction='OnShowAlertClick' imageMso='Alert' />
+					<button id='btnUpdateContent' label='更新网页内容' size='large' onAction='OnUpdateContentClick' imageMso='Refresh' />
+				</group>
+				<group id='dataGroup' label='数据操作'>
+					<button id='btnSendData' label='发送数据到 JS' size='large' onAction='OnSendDataClick' imageMso='Database' />
+				</group>
+				-->
+
+		
+		
+		</tabs>
+	</ribbon>
+</customUI>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExcelDNA WebView2 集成演示</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            margin: 20px; 
+            background-color: #f5f5f5;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        button { 
+            background-color: #0078d4; 
+            color: white; 
+            border: none; 
+            padding: 10px 15px; 
+            margin: 5px; 
+            border-radius: 4px; 
+            cursor: pointer;
+        }
+        button:hover { background-color: #106ebe; }
+        .log { 
+            background: #f8f9fa; 
+            border-left: 4px solid #0078d4; 
+            padding: 10px; 
+            margin: 10px 0; 
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ExcelDNA + WebView2 双向通信演示</h1>
+        
+        <div>
+            <h3>1. JavaScript 调用 C# 方法</h3>
+            <button onclick="callCSharpMethod()">调用 C# GetMessage</button>
+            <button onclick="callAsyncCSharpMethod()">调用 C# 异步方法</button>
+            <button onclick="sendDataToCSharp()">发送数据到 C#</button>
+        </div>
+        
+        <div>
+            <h3>2. C# 调用 JavaScript 方法的结果将显示 below</h3>
+            <div id="output" class="log">等待 C# 调用...</div>
+        </div>
+        
+        <div>
+            <h3>3. 操作日志</h3>
+            <div id="log" class="log"></div>
+        </div>
+    </div>
+
+    <script>
+        // 获取 C# 宿主对象的代理
+        const csharpHost = window.chrome.webview.hostObjects.csharpHost;
+        
+        // DOM 元素
+        const outputDiv = document.getElementById('output');
+        const logDiv = document.getElementById('log');
+        
+        // 日志函数
+        function log(message) {
+            logDiv.innerHTML += new Date().toLocaleTimeString() + ': ' + message + '\n';
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        // 供 C# 调用的 JavaScript 函数
+        function mainJavascriptFunction(message, timestamp) {
+            const result = `主函数被调用！消息: ${message}, 时间: ${timestamp}`;
+            outputDiv.innerHTML = result;
+            console.log('mainJavascriptFunction 被 C# 调用: ' + message);
+            return result;
+        }
+        
+        function showAlert(message) {
+            alert('JS Alert: ' + message);
+            log('showAlert 被调用: ' + message);
+        }
+        
+        function updateContent(newContent) {
+            outputDiv.innerHTML = `<strong>更新内容:</strong> ${newContent}`;
+            console.log('updateContent 被调用: ' + newContent);
+        }
+        
+        function processDataFromExcel(data) {
+            const dataStr = JSON.stringify(data, null, 2);
+            outputDiv.innerHTML = `<strong>收到 Excel 数据:</strong><pre>${dataStr}</pre>`;
+           console.log('processDataFromExcel 被调用，数据: ' + JSON.stringify(data));
+        }
+        
+        // JavaScript 调用 C# 方法的函数
+        async function callCSharpMethod() {
+            try {
+                log('调用 C# GetMessage 方法...');
+                const message = await csharpHost.GetMessage();
+                log('从 C# 收到: ' + message);
+                alert('C# 返回: ' + message);
+            } catch (error) {
+                log('调用 C# 方法失败: ' + error);
+            }
+        }
+        
+        async function callAsyncCSharpMethod() {
+            try {
+                log('调用 C# 异步方法...');
+                const data = await csharpHost.GetAsyncData();
+                log('从 C# 异步收到: ' + data);
+                alert('C# 异步返回: ' + data);
+            } catch (error) {
+                log('调用 C# 异步方法失败: ' + error);
+            }
+        }
+        
+        async function sendDataToCSharp() {
+            try {
+                const testData = {
+                    name: 'JavaScript',
+                    score: 100,
+                    timestamp: new Date().toISOString()
+                };
+                
+                log('发送数据到 C#: ' + JSON.stringify(testData));
+                const result = await csharpHost.ProcessJsonData(JSON.stringify(testData));
+                log('C# 处理结果: ' + result);
+                alert('C# 处理结果: ' + result);
+            } catch (error) {
+                log('发送数据到 C# 失败: ' + error);
+            }
+        }
+        
+        // 初始化日志
+        log('页面加载完成，准备就绪');
+        log('C# 宿主对象: ' + (csharpHost ? '已加载' : '未加载'));
+    </script>
+</body>
+</html>

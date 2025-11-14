@@ -1,0 +1,120 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <WebView2UseWinRT>False</WebView2UseWinRT>
+    <WebView2EnableCsWinRTProjection>False</WebView2EnableCsWinRTProjection>
+    <WebView2LoaderPreference>Dynamic</WebView2LoaderPreference>
+  </PropertyGroup>
+
+  <PropertyGroup>
+	 
+	    <TargetFrameworks>net8.0-windows</TargetFrameworks>
+	 
+	  <!--
+	  <TargetFrameworks>net8.0-windows;net48</TargetFrameworks>
+   -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+	  <LangVersion>12</LangVersion>
+	  <Platforms>AnyCPU;x64</Platforms>
+	  <ApplicationIcon>ic_launcher.ico</ApplicationIcon>
+	  <GenerateDocumentationFile>False</GenerateDocumentationFile>
+  </PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)'=='net48'">
+		<ExcelAddInInclude>ExcelDna.IntelliSense.dll</ExcelAddInInclude>
+
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows|AnyCPU'">
+	  <DebugType>none</DebugType>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows|x64'">
+	  <DebugType>none</DebugType>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows|AnyCPU'">
+	  <DebugType>none</DebugType>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows|x64'">
+	  <DebugType>none</DebugType>
+	</PropertyGroup>
+
+
+
+	<ItemGroup>
+	  <Content Include="2d\**\*">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+
+
+	<ItemGroup>
+	  <None Remove="cutfill.c" />
+	  <None Remove="cutfill.dll" />
+	</ItemGroup>
+
+
+
+
+
+
+
+	<ItemGroup>
+	  <Content Include="cutfill.c">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ic_launcher.ico" />
+	</ItemGroup>
+
+	
+  <ItemGroup>
+    <PackageReference Include="ExcelDna.AddIn" Version="1.8.0" />
+    <PackageReference Include="ExcelDna.IntelliSense" Version="1.8.0" />
+	<PackageReference Include="ExcelDna.Interop" Version="15.0.1" />
+	<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3595.46" />
+  </ItemGroup>
+
+	
+  <ItemGroup>
+    <Content Include="cutfill.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+	
+  <ItemGroup>
+    <Content Include="LL.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="RibbonResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RibbonResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="RibbonResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>RibbonResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
